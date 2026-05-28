@@ -52,7 +52,20 @@ class Tree {
   }
 
   includes(value) {
-    
+    let iterNode = this.root;
+    while (iterNode) {
+      if (iterNode.data > value) {
+        iterNode = iterNode.left;
+      }
+      else if (iterNode.data < value) {
+        iterNode = iterNode.right;
+      }
+      else {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

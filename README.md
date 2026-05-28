@@ -1,3 +1,3 @@
-# template-web
+# Binary Search Trees
 
-Creating a template for future web dev projects
+I am building a balanced BST in this project.

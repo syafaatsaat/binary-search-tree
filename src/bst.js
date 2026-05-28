@@ -67,6 +67,77 @@ class Tree {
 
     return false;
   }
+
+  insert(value) {
+    if (this.includes(value))
+      return;
+
+    if (!this.root) {
+      this.root = new Node(value);
+      return;
+    }
+
+    let iterNode = this.root;
+    while (iterNode) {
+      if (iterNode.data > value) {
+        if (!iterNode.left) {
+          iterNode.left = new Node(value);
+          return;
+        }
+        iterNode = iterNode.left;
+      }
+      else {
+        if (!iterNode.right) {
+          iterNode.right = new Node(value);
+          return;
+        }
+        iterNode = iterNode.right;
+      }
+    }
+  }
+
+  deleteItem(value) {
+    if (!this.root || !this.includes(value))
+      return;
+
+    this.#deleteNode(this.root, value);
+  }
+
+  #deleteNode(root, value) {
+    if (!root)
+      return root;
+
+    if (root.data > value) {
+      root.left = this.#deleteNode(root.left, value);
+    }
+    else if (root.data < value) {
+      root.right = this.#deleteNode(root.right, value);
+    }
+    else {
+      if (!root.left) {
+        return root.right;
+      }
+
+      if (!root.right) {
+        return root.left;
+      }
+
+      const successorNode = this.#getSuccessor(root);
+      root.data = successorNode.data;
+      root.right = this.#deleteNode(root.right, successorNode.data);
+    }
+
+    return root;
+  }
+
+  #getSuccessor(currNode) {
+    currNode = currNode.right;
+    while (currNode && currNode.left) {
+      currNode = currNode.left;
+    }
+
+    return currNode;
+  }
 }
 
 

@@ -180,7 +180,7 @@ class Tree {
   }
 
   // In-order traversal (Left -> Root -> Right) (Recursion)
-  inOrderForEach(callback, node) {
+  inOrderForEach(callback, node=this.root) {
     if (typeof callback !== "function")
       throw new Error("A callback is required!");
 
@@ -193,7 +193,7 @@ class Tree {
   }
 
   // Pre-order traversal (Root -> Left -> Right) (Recursion)
-  preOrderForEach(callback, node) {
+  preOrderForEach(callback, node=this.root) {
     if (typeof callback !== "function")
       throw new Error("A callback is required!");
 
@@ -206,7 +206,7 @@ class Tree {
   }
 
   // Post-order traversal (Left -> Right -> Root) (Recursion)
-  postOrderForEach(callback, node) {
+  postOrderForEach(callback, node=this.root) {
     if (typeof callback !== "function")
       throw new Error("A callback is required!");
 
@@ -257,7 +257,7 @@ class Tree {
         iterNode = iterNode.right;
       else
         break;
-      
+
       dist += 1;
     }
 
@@ -265,6 +265,37 @@ class Tree {
       return undefined;
 
     return dist;
+  }
+
+  isBalanced() {
+    return this.#isBalancedRecursion() > 0;
+  }
+
+  #isBalancedRecursion(node=this.root) {
+    if (!node)
+      return 0;
+
+    const leftHeight = this.#isBalancedRecursion(node.left);
+    const rightHeight = this.#isBalancedRecursion(node.right);
+
+    if (
+      leftHeight < 0 || 
+      rightHeight < 0 || 
+      Math.abs(leftHeight - rightHeight) > 1
+    ) {
+      return -1;
+    }
+
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  rebalance() {
+    const sortedArray = [];
+    this.inOrderForEach((value) => {
+      sortedArray.push(value);
+    });
+
+    this.#buildTree(sortedArray);
   }
 }
 

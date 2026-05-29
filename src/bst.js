@@ -100,18 +100,18 @@ class Tree {
     if (!this.root || !this.includes(value))
       return;
 
-    this.#deleteNode(this.root, value);
+    this.#deleteItemRecursive(this.root, value);
   }
 
-  #deleteNode(root, value) {
+  #deleteItemRecursive(root, value) {
     if (!root)
       return root;
 
     if (root.data > value) {
-      root.left = this.#deleteNode(root.left, value);
+      root.left = this.#deleteItemRecursive(root.left, value);
     }
     else if (root.data < value) {
-      root.right = this.#deleteNode(root.right, value);
+      root.right = this.#deleteItemRecursive(root.right, value);
     }
     else {
       if (!root.left) {
@@ -124,7 +124,7 @@ class Tree {
 
       const successorNode = this.#getSuccessor(root);
       root.data = successorNode.data;
-      root.right = this.#deleteNode(root.right, successorNode.data);
+      root.right = this.#deleteItemRecursive(root.right, successorNode.data);
     }
 
     return root;
@@ -138,6 +138,48 @@ class Tree {
 
     return currNode;
   }
+
+  // Breadth-first level order (Iterative version)
+  levelOrderForEachIteration(callback) {
+    if (typeof callback !== "function")
+      throw new Error("A callback is required!");
+
+    const queue = [];
+    queue.push(this.root);
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+      callback(node.value);
+
+      if (node.left)
+        queue.push(node.left);
+
+      if (node.right)
+        queue.push(node.right);
+    }
+  }
+
+  // Breadth-first level order (Recursive version)
+  levelOrderForEachRecursion(callback, queue=[this.root]) {
+    if (typeof callback !== "function")
+      throw new Error("A callback is required!");
+
+    if (queue.length === 0)
+      return;
+
+    const node = queue.shift();
+    callback(node.value);
+
+    if (node.left)
+      queue.push(node.left);
+
+    if (node.right)
+      queue.push(node.right);
+
+    this.levelOrderForEachRecursion(callback, queue);
+  }
+
+  
 }
 
 

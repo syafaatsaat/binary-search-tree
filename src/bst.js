@@ -217,6 +217,55 @@ class Tree {
     this.inOrderForEach(callback, node.right);
     callback(node.value);
   }
+
+  height(value) {
+    let iterNode = this.root;
+    while (iterNode) {
+      if (iterNode.value > value)
+        iterNode = iterNode.left;
+      else if (iterNode.value < value)
+        iterNode = iterNode.right;
+      else
+        break;
+    }
+
+    if (!iterNode)
+      return undefined;
+
+    return this.#subTreeDistToLeaf(iterNode);
+  }
+
+  #subTreeDistToLeaf(node) {
+    if (!node)
+      return 0;
+
+    let maxDist = Math.max(
+      this.#subTreeDistToLeaf(node.left),
+      this.#subTreeDistToLeaf(node.right)
+    );
+
+    return 1 + maxDist;
+  }
+
+  depth(value) {
+    let iterNode = this.root;
+    let dist = 0;
+    while (iterNode) {
+      if (iterNode.value > value)
+        iterNode = iterNode.left;
+      else if (iterNode.value < value)
+        iterNode = iterNode.right;
+      else
+        break;
+      
+      dist += 1;
+    }
+
+    if (!iterNode)
+      return undefined;
+
+    return dist;
+  }
 }
 
 

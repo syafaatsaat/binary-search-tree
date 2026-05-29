@@ -6,16 +6,18 @@ class Node {
   }
 }
 
-class Tree {
+export class Tree {
   constructor(array) {
     this.root = null;
     this.#buildTree(array);
   }
 
   #buildTree(array) {
-    const sortedUniqueArr = [...new Set(array)].sort();
+    const sortedArray = array.sort((a, b) => a - b);
+    const sortedUniqueArr = [...new Set(sortedArray)];
+    //console.log(sortedUniqueArr);
     this.root = this.#buildTreeRecursive(
-      sortedUniqueArr, 0, sortedUniqueArr.length
+      sortedUniqueArr, 0, sortedUniqueArr.length-1
     );
   }
 
@@ -24,7 +26,7 @@ class Tree {
       return null;
     }
 
-    const mid = start + (end - start) / 2;
+    const mid = start + Math.floor((end - start) / 2);
     const root = new Node(array[mid]);
 
     root.left = this.#buildTreeRecursive(array, start, mid-1);
@@ -149,7 +151,7 @@ class Tree {
 
     while (queue.length > 0) {
       const node = queue.shift();
-      callback(node.value);
+      callback(node.data);
 
       if (node.left)
         queue.push(node.left);
@@ -168,7 +170,7 @@ class Tree {
       return;
 
     const node = queue.shift();
-    callback(node.value);
+    callback(node.data);
 
     if (node.left)
       queue.push(node.left);
@@ -188,7 +190,7 @@ class Tree {
       return;
 
     this.inOrderForEach(callback, node.left);
-    callback(node.value);
+    callback(node.data);
     this.inOrderForEach(callback, node.right);
   }
 
@@ -200,9 +202,9 @@ class Tree {
     if (!node)
       return;
 
-    callback(node.value);
-    this.inOrderForEach(callback, node.left);
-    this.inOrderForEach(callback, node.right);
+    callback(node.data);
+    this.preOrderForEach(callback, node.left);
+    this.preOrderForEach(callback, node.right);
   }
 
   // Post-order traversal (Left -> Right -> Root) (Recursion)
@@ -213,17 +215,17 @@ class Tree {
     if (!node)
       return;
 
-    this.inOrderForEach(callback, node.left);
-    this.inOrderForEach(callback, node.right);
-    callback(node.value);
+    this.postOrderForEach(callback, node.left);
+    this.postOrderForEach(callback, node.right);
+    callback(node.data);
   }
 
   height(value) {
     let iterNode = this.root;
     while (iterNode) {
-      if (iterNode.value > value)
+      if (iterNode.data > value)
         iterNode = iterNode.left;
-      else if (iterNode.value < value)
+      else if (iterNode.data < value)
         iterNode = iterNode.right;
       else
         break;
@@ -251,9 +253,9 @@ class Tree {
     let iterNode = this.root;
     let dist = 0;
     while (iterNode) {
-      if (iterNode.value > value)
+      if (iterNode.data > value)
         iterNode = iterNode.left;
-      else if (iterNode.value < value)
+      else if (iterNode.data < value)
         iterNode = iterNode.right;
       else
         break;

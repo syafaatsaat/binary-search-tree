@@ -179,7 +179,44 @@ class Tree {
     this.levelOrderForEachRecursion(callback, queue);
   }
 
-  
+  // In-order traversal (Left -> Root -> Right) (Recursion)
+  inOrderForEach(callback, node) {
+    if (typeof callback !== "function")
+      throw new Error("A callback is required!");
+
+    if (!node)
+      return;
+
+    this.inOrderForEach(callback, node.left);
+    callback(node.value);
+    this.inOrderForEach(callback, node.right);
+  }
+
+  // Pre-order traversal (Root -> Left -> Right) (Recursion)
+  preOrderForEach(callback, node) {
+    if (typeof callback !== "function")
+      throw new Error("A callback is required!");
+
+    if (!node)
+      return;
+
+    callback(node.value);
+    this.inOrderForEach(callback, node.left);
+    this.inOrderForEach(callback, node.right);
+  }
+
+  // Post-order traversal (Left -> Right -> Root) (Recursion)
+  postOrderForEach(callback, node) {
+    if (typeof callback !== "function")
+      throw new Error("A callback is required!");
+
+    if (!node)
+      return;
+
+    this.inOrderForEach(callback, node.left);
+    this.inOrderForEach(callback, node.right);
+    callback(node.value);
+  }
 }
 
 
